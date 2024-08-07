@@ -4,16 +4,36 @@ print("Usage. (e.g. a * X^0 + b * X^1 - c * X^2 = d * X^0)")
 
 print("--- ---- SOLUTION ---- ---")
 
-def findpower(part, power):
-    """Searches for the power parts and returns them"""
-    num = part.split(f"*X^{power}")
-    return num[0]
+def findpower(eq, power):
+    """Searches for the coefficients and returns the positions"""
+    power_str = str(power)
+    positions = []
+    start = 0
+    while True:
+        # get the position of the coefficient starting from the 'start' index
+        position = eq.find(power_str, start)
+        
+        # If the substring is found, add the position to the list and update 'start'
+        if position != -1:
+            positions.append(position)
+            start = position + 1
+        else:
+            break
+
+    # Print the result
+    if positions:
+        print(f"The coefficient '{power_str}' was found at positions: {positions}.")
+    else:
+        print(f"The coefficient '{power_str}' was not found.")
+
+    return positions
 
 def parsel_the_equation(equation):
     """Parse the polynomial equation in the specified format and return the coefficients a, b, and c."""
     # Remove spaces
     equation = equation.replace(' ', '')
-    
+    coefficients = {0: 0, 1: 0, 2: 0}
+
     # Split the equation into LHS and RHS
     lhs, rhs = equation.split('=')
 
@@ -22,9 +42,12 @@ def parsel_the_equation(equation):
     print("lhs: ", lhs)
     print("rhs", rhs)
 
-    print("powers: ", findpower(lhs, 0))
+    print("powers: ")
+    test = findpower(lhs, 0)
+    # print(test[0])
+    print(lhs[test[0] - 4])
 
 
-parsel_the_equation("5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0")
+parsel_the_equation("-5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0")
 #parsel_the_equation(equation_input)
 # print(equation_input)
