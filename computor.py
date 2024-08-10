@@ -44,10 +44,24 @@ def parsel_the_equation(equation):
 
     print("powers: ")
     test = findpower(lhs, 0)
-    # print(test[0])
-    print(lhs[test[0] - 4])
+    # test.pop()
+    print(len(test))
+    while len(test):
+        if test[0] - 5 > -1:
+            if lhs[test[0] - 5] == '-':
+                coefficients[0] -= int(lhs[test[0] - 4])
+            elif lhs[test[0] - 5] == '+':
+                coefficients[0] += int(lhs[test[0] - 4])
+        elif test[0] - 5 == 0:
+                coefficients[0] += int(lhs[test[0] - 4])
+        test.pop(0)
+
+    
+
+    #print(lhs[test[0] - 4])
+    print(coefficients)
 
 
-parsel_the_equation("-5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0")
+parsel_the_equation("-4 * X^0 + 3 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0")
 #parsel_the_equation(equation_input)
 # print(equation_input)
