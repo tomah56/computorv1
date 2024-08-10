@@ -36,25 +36,41 @@ def parsel_the_equation(equation):
 
     # Split the equation into LHS and RHS
     lhs, rhs = equation.split('=')
+    modified_rhs = ''
+    for char in rhs:
+        if char == '+':
+            modified_rhs += '-'
+        elif char == '-':
+            modified_rhs += '+'
+        else:
+            modified_rhs += char
+
+    if rhs[0] == '-':
+        combined_equation = lhs + modified_rhs
+    else:
+        combined_equation = lhs + '-' + modified_rhs
+    
 
 
+    #print("lhs: ", lhs)
+#    print("rhs", rhs)
 
-    print("lhs: ", lhs)
-    print("rhs", rhs)
-
+    print("Reduced for: ")
+    print(combined_equation, "= 0")
     print("powers: ")
-    test = findpower(lhs, 0)
-    # test.pop()
-    print(len(test))
-    while len(test):
-        if test[0] - 5 > -1:
-            if lhs[test[0] - 5] == '-':
-                coefficients[0] -= int(lhs[test[0] - 4])
-            elif lhs[test[0] - 5] == '+':
-                coefficients[0] += int(lhs[test[0] - 4])
-        elif test[0] - 5 == 0:
-                coefficients[0] += int(lhs[test[0] - 4])
-        test.pop(0)
+    powers = 0
+    while powers < 3:
+        test = findpower(combined_equation, powers)
+        while len(test):
+            if test[0] - 5 > -1:
+                if combined_equation[test[0] - 5] == '-':
+                    coefficients[powers] -= int(combined_equation[test[0] - 4])
+                elif combined_equation[test[0] - 5] == '+':
+                    coefficients[powers] += int(combined_equation[test[0] - 4])
+            elif test[0] - 5 == 0:
+                    coefficients[powers] += int(combined_equation[test[0] - 4])
+            test.pop(0)
+        powers += 1
 
     
 
@@ -62,6 +78,6 @@ def parsel_the_equation(equation):
     print(coefficients)
 
 
-parsel_the_equation("-4 * X^0 + 3 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0")
+parsel_the_equation("-4 * X^0 + 3 * X^0 + 4 * X^1 - 3 * X^2 = 1 * X^0")
 #parsel_the_equation(equation_input)
 # print(equation_input)
