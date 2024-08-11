@@ -66,24 +66,26 @@ def solve_eq(coefficients):
     c = coefficients[0]
     # Calculate the discriminant
     discriminant = b**2 - 4*a*c
-    
     # Check if the discriminant is positive, zero, or negative
-    if discriminant > 0:
-        print("Two real and distinct roots:")
-        root1 = (-b + math.sqrt(discriminant)) / (2 * a)
-        root2 = (-b - math.sqrt(discriminant)) / (2 * a)
-        return root1, root2
-    elif discriminant == 0:
-        print("One real root:")
-        root = -b / (2 * a)
-        return root,
-    else:
-        print("No real roots, but two complex roots:")
-        real_part = -b / (2 * a)
-        imaginary_part = math.sqrt(-discriminant) / (2 * a)
-        root1 = complex(real_part, imaginary_part)
-        root2 = complex(real_part, -imaginary_part)
-        return root1, root2
+    if a != 0:
+        if discriminant > 0:
+            print("Two real and distinct roots:")
+            root1 = (-b + math.sqrt(discriminant)) / (2 * a)
+            root2 = (-b - math.sqrt(discriminant)) / (2 * a)
+            return root1, root2
+        elif discriminant == 0:
+            print("One real root:")
+            root = -b / (2 * a)
+            return root,
+        else:
+            print("No real roots, but two complex roots:")
+            real_part = -b / (2 * a)
+            imaginary_part = math.sqrt(-discriminant) / (2 * a)
+            root1 = complex(real_part, imaginary_part)
+            root2 = complex(real_part, -imaginary_part)
+            return root1, root2
+    elif b != 0:
+        return -c / b
 
 def computor(poli):
     reducedform = parsel_the_equation(poli)
