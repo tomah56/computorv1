@@ -73,12 +73,21 @@ def level_II_validator(equation):
  
 def level_III_validator(equation):
       # Check for valid term syntax
-    term_pattern = re.compile(r'^\s*-?\d+(\.\d+)?\s*\*\s*X\^\d+\s*$')
-    terms  = split
-    for term in terms:
-        term = term.strip()
-        if term and not term_pattern.match(term):
-            raise SyntaxError("Equation muissing power")
+    pattern = r'^([-+]?\s*\d*\.?\d*)\s*\*\s*X\^(\d+)\s*([+-]\s*\d*\.?\d*\s*\*\s*X\^\d+)*$'
+
+    # Match the cleaned expression against the pattern
+    match = re.fullmatch(pattern, equation)
+    
+    # Additional checks to ensure proper term formats
+    if match:
+        # Check if every term follows the pattern correctly
+        terms = re.findall(r'([-+]?\s*\d*\.?\d*)\s*\*\s*X\^(\d+)', equation)
+        for term in terms:
+            coefficient, power = term
+            if not coefficient and power:  # Missing coefficient case
+                raise SyntaxError("Wrong syntax")
+    else:
+        raise SyntaxError("Wrong syntax")
  
 
 
@@ -159,6 +168,7 @@ def solve_eq(coefficients):
         elif discriminant == 0:
             print("One real root:")
             root = -b / (2 * a)
+            # BUG it should check if its float before
             print("Fraction:")
             print(f"\n      {-1 * int(b)}\n    -----\n      {int(2 * a)}\n")
             return root,
@@ -170,6 +180,7 @@ def solve_eq(coefficients):
             root2 = complex(real_part, -imaginary_part)
             return root1, root2
     elif b != 0:
+        # BUG it should check if its float before
         print("Fraction:")
         print(f"\n      {-1 * int(c)}\n    -----\n      {int(b)}\n")
         return -c / b
@@ -179,8 +190,9 @@ def computor(poli):
     print(f"Reordered form: {reducedform} = 0")
     check_polynomial_degree(reducedform)
     new_string = level_II_validator(reducedform)
-    print(new_string)
-    coefficients = findCoefficients(reducedform)
+    # print(new_string)
+    level_III_validator(new_string)
+    coefficients = findCoefficients(new_string)
 
     print("Reduced form:")
     print(f"{coefficients[2]} * X^2 + ({coefficients[1]}) * X^1 + ({coefficients[0]}) * X^0 = 0")
