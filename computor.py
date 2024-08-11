@@ -2,6 +2,86 @@ import re
 import math
 
 
+def is_number(term):
+    """Check if a term is a number (integer or floating-point)."""
+    try:
+        float(term)  # Try converting the term to a float
+        return True
+    except ValueError:
+        return False
+
+def is_number_times_x(term):
+    """Check if the term is in the format 'number*X'."""
+    pattern = re.compile(r'^\d+(\.\d+)?\*X$')
+    return bool(pattern.match(term))
+
+def is_missing_num(term):
+    """Check if the term is in the format 'X^2' missing a the number."""
+    pattern = re.compile(r'^X\^2$')
+    return bool(pattern.match(term))
+
+def replace_power(term):
+    return f"{term}*X^0"
+
+def replace_single_x(term):
+    return f"{term}^1"
+
+def replace_number(term):
+    return f"1*{term}"
+
+def validate_input(equation):
+    # Ensure the input is a string
+    if not isinstance(equation, str):
+        raise TypeError("Input must be a string.")
+    
+    # Check for valid characters
+    allowed_characters = re.compile(r'^[0-9\.\+\-\*\^X\s=]+$')
+    if not allowed_characters.match(equation):
+        raise ValueError("Input contains invalid characters.")
+
+    # Check that the equation has exactly one '=' sign
+    sides = equation.split('=')
+    if len(sides) != 2:
+        raise SyntaxError("Equation must have exactly one '=' sign.")
+    return "Input is valid"
+
+def level_II_validator(equation):
+      # Check for valid term syntax
+    term_pattern = re.compile(r'^\s*-?\d+(\.\d+)?\s*\*\s*X\^\d+\s*$')
+    pattern = re.compile(r'\d*\.\d+|\d+ \* X|\d+X|\d+\*X|X\^2|X|\d+|[+\-*/^]')
+    terms = pattern.findall(equation)
+    # print("--   --- ----    OLD :", terms)
+    new_terms = []
+    for term in terms:
+        term = term.strip()
+        if term and not term_pattern.match(term):
+            # if  is_valid_string(term):
+            if is_number(term):
+                new_terms.append(replace_power(term))
+            elif is_number_times_x(term):
+                new_terms.append(replace_single_x(term))
+            elif is_missing_num(term):
+                new_terms.append(replace_number(term))
+            elif term == 'X':
+                new_terms.append(replace_number(replace_single_x(term)))
+            elif term == '^':
+                raise SyntaxError("Equation muissing power")
+            else:
+                new_terms.append(term)
+    # print("--   --- ----    NEW :", new_terms)
+    return ''.join(new_terms)
+ 
+def level_III_validator(equation):
+      # Check for valid term syntax
+    term_pattern = re.compile(r'^\s*-?\d+(\.\d+)?\s*\*\s*X\^\d+\s*$')
+    terms  = split
+    for term in terms:
+        term = term.strip()
+        if term and not term_pattern.match(term):
+            raise SyntaxError("Equation muissing power")
+ 
+
+
 def check_polynomial_degree(polynomial):
     """Checks if there are any higher than quadratic polynomial expression"""
     # Regular expression to find all exponents in the polynomial
@@ -80,7 +160,7 @@ def solve_eq(coefficients):
             print("One real root:")
             root = -b / (2 * a)
             print("Fraction:")
-            print(f"\n     {-1 * int(b)}\n    -----\n      {int(2 * a)}\n")
+            print(f"\n      {-1 * int(b)}\n    -----\n      {int(2 * a)}\n")
             return root,
         else:
             print("No real roots, but two complex roots:")
@@ -91,13 +171,15 @@ def solve_eq(coefficients):
             return root1, root2
     elif b != 0:
         print("Fraction:")
-        print(f"\n     {-1 * int(c)}\n    -----\n      {int(b)}\n")
+        print(f"\n      {-1 * int(c)}\n    -----\n      {int(b)}\n")
         return -c / b
 
 def computor(poli):
     reducedform = parsel_the_equation(poli)
     print(f"Reordered form: {reducedform} = 0")
     check_polynomial_degree(reducedform)
+    new_string = level_II_validator(reducedform)
+    print(new_string)
     coefficients = findCoefficients(reducedform)
 
     print("Reduced form:")
