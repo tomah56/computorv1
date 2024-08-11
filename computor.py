@@ -66,8 +66,11 @@ def solve_eq(coefficients):
     c = coefficients[0]
     # Calculate the discriminant
     discriminant = b**2 - 4*a*c
+    print("Discriminant: ", discriminant)
     # Check if the discriminant is positive, zero, or negative
     if a != 0:
+        print("Formula:")
+        print(f"\n        {-b} + √({b}^2 - 4 * {a} * {c})\n      -------------------------------------\n                   (2 * {a})\n")
         if discriminant > 0:
             print("Two real and distinct roots:")
             root1 = (-b + math.sqrt(discriminant)) / (2 * a)
@@ -76,6 +79,8 @@ def solve_eq(coefficients):
         elif discriminant == 0:
             print("One real root:")
             root = -b / (2 * a)
+            print("Fraction:")
+            print(f"\n     {-1 * int(b)}\n    -----\n      {int(2 * a)}\n")
             return root,
         else:
             print("No real roots, but two complex roots:")
@@ -85,10 +90,13 @@ def solve_eq(coefficients):
             root2 = complex(real_part, -imaginary_part)
             return root1, root2
     elif b != 0:
+        print("Fraction:")
+        print(f"\n     {-1 * int(c)}\n    -----\n      {int(b)}\n")
         return -c / b
 
 def computor(poli):
     reducedform = parsel_the_equation(poli)
+    print(f"Reordered form: {reducedform} = 0")
     check_polynomial_degree(reducedform)
     coefficients = findCoefficients(reducedform)
 
