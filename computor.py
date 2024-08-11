@@ -2,13 +2,8 @@ import re
 import math
 
 
-print("Welcome to computor!")
-print("Usage. (e.g. a * X^0 + b * X^1 - c * X^2 = d * X^0)")
-#equation_input = input('Enter the polynomial equation:')
-
-print("--- ---- SOLUTION ---- ---")
-
-def get_polynomial_degree(polynomial):
+def check_polynomial_degree(polynomial):
+    """Checks if there are any higher than quadratic polynomial expression"""
     # Regular expression to find all exponents in the polynomial
     exponents = re.findall(r'X\^(\d+)', polynomial)
     
@@ -21,10 +16,13 @@ def get_polynomial_degree(polynomial):
     
     # Find the maximum exponent, which is the degree of the polynomial
     max_degree = max(exponents)
-    
-    return max_degree
+    if max_degree > 2:
+        print(f"I can't solve a {max_degree} Degree polynomial!")
+        raise SystemExit("Stopping the code here.")
+
 
 def findCoefficients(eq):
+    """Gets the reduced form polinomial (max quadtratic) and return the coefficients a, b, and c."""
     print("powers: ")
     powers = 0
     coefficients = {0: 0, 1: 0, 2: 0}
@@ -37,8 +35,9 @@ def findCoefficients(eq):
         powers += 1
     return coefficients
 
+
 def parsel_the_equation(equation):
-    """Parse the polynomial equation in the specified format and return the coefficients a, b, and c."""
+    """Parse the polynomial equation in a combined format and returns it"""
     # Remove spaces
     equation = equation.replace(' ', '')
 
@@ -59,7 +58,9 @@ def parsel_the_equation(equation):
         combined_equation = lhs + '-' + modified_rhs
     return combined_equation
 
+
 def solve_eq(coefficients):
+    """Solving the polynomial based on the quadtratic solution formula and returns the roots"""
     a = coefficients[2]
     b = coefficients[1]
     c = coefficients[0]
@@ -83,35 +84,4 @@ def solve_eq(coefficients):
         root1 = complex(real_part, imaginary_part)
         root2 = complex(real_part, -imaginary_part)
         return root1, root2
-  
 
-#reducedform = parsel_the_equation(equation_input)
-reducedform =  parsel_the_equation("-4 * X^0 + 3 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0")
-degree = get_polynomial_degree(reducedform)
-
-if degree > 2:
-    print(f"I can't solve a {degree} Degree polynomial!")
-    raise SystemExit("Stopping the code here.")
-
-coefficients = findCoefficients(reducedform)
-print("Reduced form:")
-print(f"{coefficients[2]} * X^2 + ({coefficients[1]}) * X^1 + ({coefficients[0]}) * X^0 = 0")
-
-print("Coefficients:", coefficients)
-
-if all(coef == 0 for coef in coefficients):
-    print("The equation is an identity. Every x is a solution")
-elif coefficients[0] != 0 and coefficients[1] == 0 and coefficients[2] == 0:
-    print("The equation is an Contradiction. There is no solution")
-else:
-    if coefficients[2] != 0:
-        print("Degree 2 - quadratic")
-    elif coefficients[1] != 0:
-        print("Degree 1 - linear")
-    elif coefficients[0] != 0:
-        print("Degree 0 - non-zero constant")
-
-    roots = solve_eq(coefficients)
-
-    print(roots)
-    # print(equation_input)
