@@ -1,42 +1,26 @@
 import argparse
-from computor import *
+from computor import computor
 
 def main(debug):
     try:
         print("Welcome to computor!")
         print("Usage. (e.g. a * X^0 + b * X^1 - c * X^2 = d * X^0)")
         if debug:
-           equation_input = "-4 * X^0 + 3 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0"
+            print("Debug mode! no user imput.")
+            equation_input = "-4 * X^0 + 3 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0"
+            equation_input = "1 * X^0 + 2 * X^1 - 1 * X^2 = 0"
         else:
-           equation_input = input('Enter the polynomial equation:')
+            equation_input = input('Enter the polynomial equation:')
        
-        reducedform = parsel_the_equation(equation_input)
-        check_polynomial_degree(reducedform)
-        coefficients = findCoefficients(reducedform)
+        computor(equation_input)
 
-        print("Reduced form:")
-        print(f"{coefficients[2]} * X^2 + ({coefficients[1]}) * X^1 + ({coefficients[0]}) * X^0 = 0")
-
-        print("Coefficients:", coefficients)
-
-        if all(coef == 0 for coef in coefficients):
-            print("The equation is an identity. Every x is a solution")
-        elif coefficients[0] != 0 and coefficients[1] == 0 and coefficients[2] == 0:
-            print("The equation is an Contradiction. There is no solution")
-        else:
-            if coefficients[2] != 0:
-                print("Degree 2 - quadratic")
-            elif coefficients[1] != 0:
-                print("Degree 1 - linear")
-            elif coefficients[0] != 0:
-                print("Degree 0 - non-zero constant")
-
-            roots = solve_eq(coefficients)
-
-            print(roots)
     except (KeyError, Exception) as e:
         print("Error:", e)
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description="Run the application with optional debug mode.")
+    parser.add_argument('--debug', action='store_true', help="Enable debug mode")
+    args = parser.parse_args()
+    
+    main(debug=args.debug)

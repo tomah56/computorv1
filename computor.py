@@ -18,7 +18,7 @@ def check_polynomial_degree(polynomial):
     max_degree = max(exponents)
     if max_degree > 2:
         print(f"I can't solve a {max_degree} Degree polynomial!")
-        raise SystemExit("Stopping the code here.")
+        raise ValueError("The program only handles quadratic equations.")
 
 
 def findCoefficients(eq):
@@ -85,3 +85,27 @@ def solve_eq(coefficients):
         root2 = complex(real_part, -imaginary_part)
         return root1, root2
 
+def computor(poli):
+    reducedform = parsel_the_equation(poli)
+    check_polynomial_degree(reducedform)
+    coefficients = findCoefficients(reducedform)
+
+    print("Reduced form:")
+    print(f"{coefficients[2]} * X^2 + ({coefficients[1]}) * X^1 + ({coefficients[0]}) * X^0 = 0")
+
+    print("Coefficients:", coefficients)
+
+    if all(coef == 0 for coef in coefficients):
+        print("The equation is an identity. Every x is a solution")
+    elif coefficients[0] != 0 and coefficients[1] == 0 and coefficients[2] == 0:
+        print("The equation is an Contradiction. There is no solution")
+    else:
+        if coefficients[2] != 0:
+            print("Degree 2 - quadratic")
+        elif coefficients[1] != 0:
+            print("Degree 1 - linear")
+        elif coefficients[0] != 0:
+            print("Degree 0 - non-zero constant")
+        roots = solve_eq(coefficients)
+        print(roots)
+        return roots
