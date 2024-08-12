@@ -17,13 +17,14 @@ def main(debug):
                 equation_input = "5 * X^0 + * X^1 = 3 * X^0" # invalid coefficient
                 equation_input = "5 * X^0 + 9 X^1 = 3 * X^0" # whitout star
                 equation_input = "-X + 5.1 + 4 * X + X^2 = X^2 + 9" # freeform
+                equation_input = "2 * X ^ 2 - 8 * X - 4 = 3 * X - X ^ 2   " # show fraction
                 equation_input = "X^0 +1 = 1" # freeform
                 equation_input = "X^1 +1 = -1" # freeform
             else:
                 equation_input = input('Enter the polynomial equation:')
-
-            validate_input(equation_input)
-            computor(equation_input)
+            if equation_input != "exit":
+                validate_input(equation_input)
+                computor(equation_input)
             if debug:
                 equation_input = "exit"
 

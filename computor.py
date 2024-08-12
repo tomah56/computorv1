@@ -160,8 +160,17 @@ def solve_eq(coefficients):
         print(f"\n        {-b} + √({b}^2 - 4 * {a} * {c})\n      -------------------------------------\n                   (2 * {a})\n")
         if discriminant > 0:
             print("Two real and distinct roots:")
-            root1 = (-b + math.sqrt(discriminant)) / (2 * a)
-            root2 = (-b - math.sqrt(discriminant)) / (2 * a)
+            part1 = (-b + math.sqrt(discriminant))
+            part2 = (-b - math.sqrt(discriminant))
+            root1 = part1 / (2 * a)
+            root2 = part2 / (2 * a)
+            if part1.is_integer() and part2.is_integer() and a.is_integer():
+                print("Fraction:")
+                print("Root 1:")
+                print(f"\n      {int(part1)}\n    -----\n      {int(2 * a)}\n")
+                print("Root 2:")
+                print(f"\n      {int(part2)}\n    -----\n      {int(2 * a)}\n")
+
             return root1, root2
         elif discriminant == 0:
             print("One real root:")
