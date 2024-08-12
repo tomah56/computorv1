@@ -6,7 +6,7 @@ def main(debug):
         print("\n     ***     Welcome to computor!   ***     \n")
         print("Usage. (e.g. a * X^0 + b * X^1 - c * X^2 = d * X^0)")
         equation_input = ""
-        while equation_input != "exit":
+        while equation_input != "EXIT":
             if debug:
                 print("Debug mode! no user imput.")
                 equation_input = "1 * X^0 + 2 * X^1 - 1 * X^2 = 0"
@@ -22,11 +22,13 @@ def main(debug):
                 equation_input = "X^1 +1 = -1" # freeform
             else:
                 equation_input = input('Enter the polynomial equation:')
-            if equation_input != "exit":
+                equation_input = equation_input.upper()
+
+            if equation_input != "EXIT":
                 validate_input(equation_input)
                 computor(equation_input)
             if debug:
-                equation_input = "exit"
+                equation_input = "EXIT"
 
     except (KeyError, TypeError, ValueError, SyntaxError, IndexError, Exception) as e:
         print("Error:", e)

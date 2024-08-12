@@ -50,7 +50,7 @@ def level_II_validator(equation):
     term_pattern = re.compile(r'^\s*-?\d+(\.\d+)?\s*\*\s*X\^\d+\s*$')
     pattern = re.compile(r'\d*\.\d+|\d+\*X\^\d+|\d+\*X|\d+|X\^\d+|X|[+-]?\d*\.?\d+\*?X\^\d+|[+\-*/^]')
     terms = pattern.findall(equation)
-    print("--   --- ----    OLD :", terms)
+    # print("--   --- ----    OLD :", terms)
     new_terms = []
     for term in terms:
         term = term.strip()
@@ -71,7 +71,7 @@ def level_II_validator(equation):
                 new_terms.append(term)
         else:
             new_terms.append(term)
-    print("--   --- ----    NEW :", new_terms)
+    # print("--   --- ----    NEW :", new_terms)
     return ''.join(new_terms)
  
 def level_III_validator(equation):
