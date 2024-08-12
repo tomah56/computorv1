@@ -16,8 +16,8 @@ def is_number_times_x(term):
     return bool(pattern.match(term))
 
 def is_missing_num(term):
-    """Check if the term is in the format 'X^2' missing a the number."""
-    pattern = re.compile(r'^X\^2$')
+    """Check if the term is in the format 'X^2' missing the number"""
+    pattern = re.compile(r'^X\^\d$')
     return bool(pattern.match(term))
 
 def replace_power(term):
@@ -46,20 +46,15 @@ def validate_input(equation):
     return "Input is valid"
 
 def level_II_validator(equation):
-      # Check for valid term syntax
+    # Check for valid term syntax
     term_pattern = re.compile(r'^\s*-?\d+(\.\d+)?\s*\*\s*X\^\d+\s*$')
-    # pattern = re.compile(r'\d*\.\d+|\d+ \* X|\d+X|\d+\*X|X\^\d|X|\d+|\d*X\^\d|[+\-*/^]')
     pattern = re.compile(r'\d*\.\d+|\d+\*X\^\d+|\d+\*X|\d+|X\^\d+|X|[+-]?\d*\.?\d+\*?X\^\d+|[+\-*/^]')
-
     terms = pattern.findall(equation)
-    # terms = re.split(r'(?=[+-])', equation)
-
     print("--   --- ----    OLD :", terms)
     new_terms = []
     for term in terms:
         term = term.strip()
         if term and not term_pattern.match(term):
-            # if  is_valid_string(term):
             if is_number(term):
                 new_terms.append(replace_power(term))
             elif is_number_times_x(term):
@@ -76,17 +71,14 @@ def level_II_validator(equation):
                 new_terms.append(term)
         else:
             new_terms.append(term)
-        
     print("--   --- ----    NEW :", new_terms)
     return ''.join(new_terms)
  
 def level_III_validator(equation):
-      # Check for valid term syntax
+    # Check for valid term syntax
     pattern = r'^([-+]?\s*\d*\.?\d*)\s*\*\s*X\^(\d+)\s*([+-]\s*\d*\.?\d*\s*\*\s*X\^\d+)*$'
-
     # Match the cleaned expression against the pattern
     match = re.fullmatch(pattern, equation)
-    
     # Additional checks to ensure proper term formats
     if match:
         # Check if every term follows the pattern correctly
@@ -104,14 +96,11 @@ def check_polynomial_degree(polynomial):
     """Checks if there are any higher than quadratic polynomial expression"""
     # Regular expression to find all exponents in the polynomial
     exponents = re.findall(r'X\^(\d+)', polynomial)
-    
     # Convert exponents to integers
     exponents = [int(exp) for exp in exponents]
-    
     # If there are no exponents found, return degree 0
     if not exponents:
         return 0
-    
     # Find the maximum exponent, which is the degree of the polynomial
     max_degree = max(exponents)
     if max_degree > 2:
@@ -189,7 +178,7 @@ def solve_eq(coefficients):
             root2 = complex(real_part, -imaginary_part)
             return root1, root2
     elif b != 0:
-        if b.is_integer() and c.is_integer():
+        if b.is_integer() and c.is_integer() and b != 1:
             print("Fraction:")
             print(f"\n      {-1 * int(c)}\n    -----\n      {int(b)}\n")
         return -c / b
@@ -221,5 +210,5 @@ def computor(poli):
         elif coefficients[0] != 0:
             print("Degree 0 - non-zero constant")
         roots = solve_eq(coefficients)
-        print(roots)
+        print(f"\nRoots: {roots}\n")
         return roots
