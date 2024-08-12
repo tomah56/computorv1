@@ -48,9 +48,13 @@ def validate_input(equation):
 def level_II_validator(equation):
       # Check for valid term syntax
     term_pattern = re.compile(r'^\s*-?\d+(\.\d+)?\s*\*\s*X\^\d+\s*$')
-    pattern = re.compile(r'\d*\.\d+|\d+ \* X|\d+X|\d+\*X|X\^2|X|\d+|[+\-*/^]')
+    # pattern = re.compile(r'\d*\.\d+|\d+ \* X|\d+X|\d+\*X|X\^\d|X|\d+|\d*X\^\d|[+\-*/^]')
+    pattern = re.compile(r'\d*\.\d+|\d+\*X\^\d+|\d+\*X|\d+|X\^\d+|X|[+-]?\d*\.?\d+\*?X\^\d+|[+\-*/^]')
+
     terms = pattern.findall(equation)
-    # print("--   --- ----    OLD :", terms)
+    # terms = re.split(r'(?=[+-])', equation)
+
+    print("--   --- ----    OLD :", terms)
     new_terms = []
     for term in terms:
         term = term.strip()
@@ -65,10 +69,15 @@ def level_II_validator(equation):
             elif term == 'X':
                 new_terms.append(replace_number(replace_single_x(term)))
             elif term == '^':
-                raise SyntaxError("Equation muissing power")
+                raise SyntaxError(f"Equation muissing power! {term}")
+            elif term == '*':
+                raise SyntaxError(f"Equation incomplete! {term}")
             else:
                 new_terms.append(term)
-    # print("--   --- ----    NEW :", new_terms)
+        else:
+            new_terms.append(term)
+        
+    print("--   --- ----    NEW :", new_terms)
     return ''.join(new_terms)
  
 def level_III_validator(equation):
@@ -85,7 +94,7 @@ def level_III_validator(equation):
         for term in terms:
             coefficient, power = term
             if not coefficient and power:  # Missing coefficient case
-                raise SyntaxError("Wrong syntax")
+                raise SyntaxError(f"Wrong syntax: {term}")
     else:
         raise SyntaxError("Wrong syntax")
  
@@ -168,9 +177,9 @@ def solve_eq(coefficients):
         elif discriminant == 0:
             print("One real root:")
             root = -b / (2 * a)
-            # BUG it should check if its float before
-            print("Fraction:")
-            print(f"\n      {-1 * int(b)}\n    -----\n      {int(2 * a)}\n")
+            if a.is_integer() and c.is_integer():
+                print("Fraction:")
+                print(f"\n      {-1 * int(b)}\n    -----\n      {int(2 * a)}\n")
             return root,
         else:
             print("No real roots, but two complex roots:")
@@ -180,12 +189,13 @@ def solve_eq(coefficients):
             root2 = complex(real_part, -imaginary_part)
             return root1, root2
     elif b != 0:
-        # BUG it should check if its float before
-        print("Fraction:")
-        print(f"\n      {-1 * int(c)}\n    -----\n      {int(b)}\n")
+        if b.is_integer() and c.is_integer():
+            print("Fraction:")
+            print(f"\n      {-1 * int(c)}\n    -----\n      {int(b)}\n")
         return -c / b
 
 def computor(poli):
+    """A small program to solve polynomial equations"""
     reducedform = parsel_the_equation(poli)
     print(f"Reordered form: {reducedform} = 0")
     check_polynomial_degree(reducedform)

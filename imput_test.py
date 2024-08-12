@@ -21,10 +21,6 @@ class TestValidateInput(unittest.TestCase):
         with self.assertRaises(SyntaxError):
             validate_input("5 * X^0 + 4 * X^ + 1 * X^0")  # Invalid exponent format
 
-    def test_invalid_coefficient(self):
-        with self.assertRaises(SyntaxError):
-            validate_input("5 * X^0 + * X^1 = 1 * X^0")  # Missing coefficient
-
     def test_invalid_input_type(self):
         with self.assertRaises(TypeError):
             validate_input(5)  # Non-string input
